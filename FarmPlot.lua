@@ -3,6 +3,7 @@ local clickDetector = farmPlot.ClickDetector
 
 local hasCrop = false
 local crops = {}
+local corrutepCrops = {}
 local grown = false
 
 
@@ -14,12 +15,15 @@ clickDetector.MouseClick:Connect(function(player)
 	
 	if grown then
 		for i, crop in ipairs(crops) do
-
+			crop:Destroy()
+		end
+		for i, crop in ipairs(corrutepCrops) do
 			crop:Destroy()
 		end
 		hasCrop = false	
 		grown = false
 		crops = {}
+		corrutepCrops= {}
 		return
 	end
 	
@@ -42,7 +46,7 @@ clickDetector.MouseClick:Connect(function(player)
 	
 	for i, crop in ipairs(crops) do
 		
-		crop.Size = Vector3.new(0.5, 2, 0.5)
+		crop.Size = Vector3.new(0.5, 1.2, 0.5)
 		crop.Color = Color3.new(0.403922, 0.729412, 0.027451)
 		crop.Material = Enum.Material.Grass
 		crop.Anchored = true
@@ -55,8 +59,6 @@ clickDetector.MouseClick:Connect(function(player)
 		for j = -2, 2 do
 			
 			crops[cropNumber].Position = farmPlot.Position + Vector3.new(i, 1.5, j)
-
-			
 			cropNumber = cropNumber+1
 			
 		end
@@ -64,14 +66,55 @@ clickDetector.MouseClick:Connect(function(player)
 	
 	hasCrop = true
 	
-	task.wait (3)
+	--task.wait (3)
 	
-	for i, crop in ipairs(crops) do
+	--for i, crop in ipairs(crops) do
 
-		crop.Size = Vector3.new(0.5, 6, 0.5)
-		crop.Color = Color3.new(0.835294, 0.717647, 0.0470588)
+	--	crop.Size = Vector3.new(0.5, 3.5, 0.5)
+	--	crop.Color = Color3.new(0.666667, 0.721569, 0.180392)
+	--end
+	
+	--task.wait (3)
+
+	--for i, crop in ipairs(crops) do
+
+	--	crop.Size = Vector3.new(0.5, 6.5, 0.5)
+	--	crop.Color = Color3.new(0.776471, 0.74902, 0)
+	--end
+	
+	local randomIteration = math.random(1,10)
+	
+	for j = 1,10 do
+		for i, crop in ipairs(crops) do
+			
+		
+			crop.Size += Vector3.new(0,0.3, 0)
+			task.wait(0.001)
+		
+			if j>3 and j<5  then
+				crop.Color = Color3.new(0.870588, 1, 0.4)
+			end
+		
+			if j>5 then
+				crop.Color = Color3.new(0.87451, 0.886275, 0.0823529)
+			end
+				
+		end
+	
+		if j==randomIteration then
+			for i = 1,2 do
+				local randomNumber = math.random(1,#crops)
+				crops[randomNumber].Color = Color3.new(0.54902, 0.235294, 0.0235294)
+				table.insert(corrutepCrops, crops[randomNumber])
+				table.remove(crops, randomNumber)	
+				
+				
+			end
+			
+		end
 	end
 	
+
 	grown = true
 	
 end)
